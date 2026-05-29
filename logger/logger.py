@@ -22,7 +22,7 @@ while True:
         time.sleep(5)
 
 
-mongo_client = MongoClient("mongodb://mongo:27017/")
+mongo_client = MongoClient("mongodb://mongo/")
 mongo_db = mongo_client["logs_db"]
 mongo_collection = mongo_db["audit_logs"]
 

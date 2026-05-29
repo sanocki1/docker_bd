@@ -11,15 +11,13 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
-    ports:
-      - "3307:3306"
 
   web:
     build: ./web
     container_name: flask_kontener
 
     ports:
-      - "5000:5000"
+      - "5000:5000" #host:container
 
     depends_on:
       - db
@@ -27,9 +25,6 @@ services:
   mongo:
     image: mongo:7
     container_name: mongo_kontener
-
-    ports:
-      - "27017:27017"
 
     volumes:
       - mongo_data:/data/db
