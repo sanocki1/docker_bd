@@ -1,9 +1,14 @@
 from flask import Flask, request
 import mysql.connector
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+PASSWORD = os.getenv("WEB_PASSWORD")
+if not PASSWORD:
+    raise Exception("WEB_PASSWORD env variable not set")
 
 app = Flask(__name__)
-
-PASSWORD = "tajne"
 
 @app.route("/", methods=["GET", "POST"])
 def index():

@@ -3,40 +3,52 @@ services:
   db:
     build: ./db
     container_name: mysql_kontener
-
     environment:
       MYSQL_ROOT_PASSWORD: q
       MYSQL_DATABASE: wydarzenia
-
     volumes:
       - mysql_data:/var/lib/mysql
-
 
   web:
     build: ./web
     container_name: flask_kontener
-
     ports:
       - "5000:5000" #host:container
-
     depends_on:
       - db
 
-  mongo:
+  mongo1:
     image: mongo:7
-    container_name: mongo_kontener
-
+    container_name: mongo_kontener1
+    command: ["mongod", "--replSet", "rs0"]
     volumes:
-      - mongo_data:/data/db
+      - mongo1_data:/data/db
+
+  mongo2:
+    image: mongo:7
+    container_name: mongo_kontener2
+    command: ["mongod", "--replSet", "rs0"]
+    volumes:
+      - mongo2_data:/data/db
+
+  mongo3:
+    image: mongo:7
+    container_name: mongo_kontener3
+    command: ["mongod", "--replSet", "rs0"]
+    volumes:
+      - mongo3_data:/data/db
 
   logger:
     build: ./logger
     container_name: logger_kontener
-
     depends_on:
       - db
-      - mongo
+      - mongo1
+      - mongo2
+      - mongo3
 
 volumes:
   mysql_data:
-  mongo_data:
+  mongo1_data:
+  mongo2_data:
+  mongo3_data:

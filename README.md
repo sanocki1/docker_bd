@@ -15,6 +15,24 @@ Jesli chcesz usunac wolumeny:
 docker compose down -v
 ```
 
+## Setup MongoDB replikacja
+```bashbash
+docker exec -it mongo_kontener1 mongosh
+
+rs.initiate({
+_id: "rs0",
+  members: [
+    { _id: 0, host: "mongo_kontener1:27017", priority: 2 },
+    { _id: 1, host: "mongo_kontener2:27017", priority: 1 },
+    { _id: 2, host: "mongo_kontener3:27017", priority: 1 }
+  ]
+ });
+ 
+rs.status()
+
+docker network ls - wyświetla sieci
+```
+
 ## Testowanie baz
 ### MySQL
 ```bash

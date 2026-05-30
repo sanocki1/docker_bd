@@ -2,6 +2,7 @@ import time
 import mysql.connector
 from pymongo import MongoClient
 
+MONGO_URI = "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=rs0"
 
 while True:
     try:
@@ -21,8 +22,16 @@ while True:
         print(err)
         time.sleep(5)
 
+while True:
+    try:
+        mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+        mongo_client.admin.command("ping")
+        print("OK MONGO")
+        break
+    except Exception as err:
+        print(err)
+        time.sleep(5)
 
-mongo_client = MongoClient("mongodb://mongo/")
 mongo_db = mongo_client["logs_db"]
 mongo_collection = mongo_db["audit_logs"]
 
