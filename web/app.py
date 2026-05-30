@@ -1,12 +1,17 @@
 from flask import Flask, request
 import mysql.connector
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+MYSQL_HOST = os.getenv("MYSQL_HOST", "db")
+MYSQL_USER = os.getenv("MYSQL_USER", "root")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
+MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "wydarzenia")
 PASSWORD = os.getenv("WEB_PASSWORD")
+
 if not PASSWORD:
     raise Exception("WEB_PASSWORD env variable not set")
+if not MYSQL_PASSWORD:
+    raise Exception("DB_PASSWORD env variable not set")
 
 app = Flask(__name__)
 
@@ -23,10 +28,10 @@ def index():
             return "Bledne haslo"
 
         db = mysql.connector.connect(
-            host="db",
-            user="root",
-            password="q",
-            database="wydarzenia"
+            host=MYSQL_HOST,
+            user=MYSQL_USER,
+            password=MYSQL_PASSWORD,
+            database=MYSQL_DATABASE
         )
 
         cursor = db.cursor()

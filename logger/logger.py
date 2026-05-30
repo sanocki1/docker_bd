@@ -1,8 +1,13 @@
 import time
 import mysql.connector
 from pymongo import MongoClient
+import os
 
-MONGO_URI = "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=rs0"
+MYSQL_HOST = os.getenv("MYSQL_HOST", "db")
+MYSQL_USER = os.getenv("MYSQL_USER", "root")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
+MYSQL_DATABASE = os.getenv("MYSQL_DATABASE", "wydarzenia")
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=rs0")
 
 while True:
     try:
@@ -10,10 +15,10 @@ while True:
         pool = mysql.connector.pooling.MySQLConnectionPool(
             pool_name="logger_pool",
             pool_size=5,
-            host="db",
-            user="root",
-            password="q",
-            database="wydarzenia"
+            host=MYSQL_HOST,
+            user=MYSQL_USER,
+            password=MYSQL_PASSWORD,
+            database=MYSQL_DATABASE
         )
         print("OK MYSQL")
         break

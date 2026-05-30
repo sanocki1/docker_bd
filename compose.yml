@@ -4,8 +4,8 @@ services:
     build: ./db
     container_name: mysql_kontener
     environment:
-      MYSQL_ROOT_PASSWORD: q
-      MYSQL_DATABASE: wydarzenia
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -16,6 +16,12 @@ services:
       - "5000:5000" #host:container
     depends_on:
       - db
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      WEB_PASSWORD: ${WEB_PASSWORD}
 
   mongo1:
     image: mongo:7
@@ -38,6 +44,17 @@ services:
     volumes:
       - mongo3_data:/data/db
 
+  mongo-init:
+    image: mongo:7
+    container_name: mongo_init_kontener
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    volumes:
+      - ./mongo/mongo-init.sh:/mongo-init.sh
+    entrypoint: ["/bin/sh", "/mongo-init.sh"]
+
   logger:
     build: ./logger
     container_name: logger_kontener
@@ -46,6 +63,13 @@ services:
       - mongo1
       - mongo2
       - mongo3
+      - mongo-init
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MONGO_URI: ${MONGO_URI}
 
 volumes:
   mysql_data:
