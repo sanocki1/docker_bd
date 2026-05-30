@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS `wydarzenia`;
 USE wydarzenia;
 
 CREATE TABLE zapisy (
